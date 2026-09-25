@@ -200,7 +200,8 @@ Provides detailed:
 Smart_Quality_Intelligence/
 │
 ├── backend/
-│   └── app.py
+│   ├── app.py
+│   └── requirements.txt
 │
 ├── frontend/
 │   ├── index.html
@@ -210,6 +211,7 @@ Smart_Quality_Intelligence/
 │   └── style.css
 │
 ├── src/
+│   ├── __init__.py
 │   ├── analysis.py
 │   ├── business_impact.py
 │   ├── computer_vision.py
@@ -222,12 +224,24 @@ Smart_Quality_Intelligence/
 │   ├── preprocessing.py
 │   ├── production_predictions.py
 │   ├── root_cause.py
-│   └── visualization.py
+│   ├── utils.py
+│   ├── visualization.py
+│   │
+│   └── vision/
+│       ├── anomaly_detection.py
+│       ├── defect_analysis.py
+│       ├── defect_performance.py
+│       ├── image_loader.py
+│       ├── image_preprocessing.py
+│       ├── vision_model.py
+│       └── vision_utils.py
 │
 ├── outputs/
 │   ├── figures/
 │   ├── models/
 │   └── reports/
 │
+├── config.py
+├── main.py
 ├── requirements.txt
 └── README.md
