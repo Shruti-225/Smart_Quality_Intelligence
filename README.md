@@ -146,6 +146,8 @@ Allows users to enter the selected production-process features and receive:
 
 ### Analytics
 
+![Analytics Dashboard](outputs/figures/analytics.png)
+
 Provides detailed:
 
 - Production analysis
