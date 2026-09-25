@@ -118,6 +118,8 @@ The potential savings estimate represents the projected savings from reducing ap
 
 ## 🌐 Web Application
 
+![Smart Quality Intelligence Dashboard](outputs/figures/dashboard.png)
+
 The project includes a Flask backend and an interactive frontend.
 
 ### Dashboard
