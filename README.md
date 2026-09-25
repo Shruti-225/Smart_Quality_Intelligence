@@ -136,6 +136,8 @@ Provides:
 
 ### Quality Prediction
 
+![Quality Prediction](outputs/figures/prediction.png)
+
 Allows users to enter the selected production-process features and receive:
 
 - Quality status
