@@ -1,0 +1,7 @@
+metric,value
+Tabular Total Records,314.0
+Tabular Predicted Defects,8.0
+Tabular Defect Rate,0.025477707006369428
+Vision Total Images,160.0
+Vision Predicted Defects,118.0
+Vision Defect Rate,0.7375

@@ -1,0 +1,13 @@
+feature,category,metric,value
+0,Production,Total Production Units,1567
+1,Production,Good Units,1463
+2,Production,Defective Units,104
+3,Quality,Defect Rate,0.06636885768985322
+4,ML Model,Best Model,Random Forest
+5,ML Model,Best Model F1 Score,0.1666666666666666
+6,ML Model,Best Model ROC-AUC,0.760523321956769
+7,Vision,Average Detection Rate,0.9927536231884058
+8,Vision,Most Difficult Defect,thread_side
+9,Vision,Difficult Defect Detection Rate,0.9565217391304348
+10,Business Impact,Estimated Quality Loss,52000.0
+11,Business Impact,Potential Savings,13000.0

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Quality Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+    <div class="header-content">
+
+        <div>
+            <h1>Smart Quality Intelligence</h1>
+            <p>AI-Powered Manufacturing Quality Control</p>
+        </div>
+
+        <nav>
+
+    <a href="index.html" class="active">
+        Dashboard
+    </a>
+
+    <a href="prediction.html">
+        Quality Prediction
+    </a>
+
+    <a href="analytics.html">
+        Analytics
+    </a>
+
+    </nav>
+
+    </div>
+
+</header>
+
+    <main>
+
+        <section class="hero">
+            <h2>Quality Overview</h2>
+            <p>
+                Production quality monitoring using Machine Learning
+                and Computer Vision.
+            </p>
+        </section>
+
+        <section class="cards">
+
+            <div class="card">
+                <h3>Total Production</h3>
+                <p id="totalProduction">Loading...</p>
+            </div>
+
+            <div class="card">
+                <h3>Good Units</h3>
+                <p id="goodUnits">Loading...</p>
+            </div>
+
+            <div class="card">
+                <h3>Defective Units</h3>
+                <p id="defectiveUnits">Loading...</p>
+            </div>
+
+            <div class="card">
+                <h3>Defect Rate</h3>
+                <p id="defectRate">Loading...</p>
+            </div>
+
+            <div class="card">
+                <h3>Quality Loss</h3>
+                <p id="qualityLoss">Loading...</p>
+            </div>
+
+            <div class="card">
+                <h3>Potential Savings</h3>
+                <p id="potentialSavings">Loading...</p>
+            </div>
+
+                </section>
+
+        <!-- Production Quality Distribution -->
+
+        <section class="chart-box">
+
+            <h2>Production Quality Distribution</h2>
+
+            <h3>Good vs Defective Units</h3>
+
+            <div class="quality-chart">
+
+                <div class="chart-row">
+
+                    <span class="chart-label">
+                        Good Units
+                    </span>
+
+                    <div class="chart-bar-container">
+
+                        <div
+                            class="chart-bar good-bar"
+                            style="width: 93.36%;">
+                        </div>
+
+                    </div>
+
+                    <span class="chart-value">
+                        1463
+                    </span>
+
+                </div>
+
+
+                <div class="chart-row">
+
+                    <span class="chart-label">
+                        Defective Units
+                    </span>
+
+                    <div class="chart-bar-container">
+
+                        <div
+                            class="chart-bar defective-bar"
+                            style="width: 6.64%;">
+                        </div>
+
+                    </div>
+
+                    <span class="chart-value">
+                        104
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="status-section">
+            <h2>System Status</h2>
+            <p id="status">Connecting to Smart Quality Backend...</p>
+        </section>
+
+        <section class="analytics-section">
+
+    <h2>AI & Computer Vision Analytics</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Highest ROC-AUC Model</h3>
+            <p id="bestModel">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>ROC-AUC</h3>
+            <p id="rocAuc">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>F1 Score</h3>
+            <p id="f1Score">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>Vision Detection Rate</h3>
+            <p id="visionDetection">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>Most Difficult Defect</h3>
+            <p id="difficultDefect">Loading...</p>
+        </div>
+
+        <div class="card">
+            <h3>Difficult Defect Detection</h3>
+            <p id="difficultDefectRate">Loading...</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- AI Quality Insights -->
+
+<section class="analytics-section">
+
+    <h2>AI Quality Insights</h2>
+
+    <div class="cards">
+
+        <div class="card insight-card">
+            <h3>Overall Defect Rate</h3>
+            <p>6.64%</p>
+            <small>
+                Current production defect rate
+            </small>
+        </div>
+
+
+        <div class="card insight-card">
+            <h3>Quality Loss</h3>
+            <p>₹52,000</p>
+            <small>
+                Estimated loss from defective units
+            </small>
+        </div>
+
+
+        <div class="card insight-card">
+            <h3>Potential Savings</h3>
+            <p>₹13,000</p>
+            <small>
+                Estimated savings from defect reduction
+            </small>
+        </div>
+
+
+        <div class="card insight-card">
+            <h3>Vision Performance</h3>
+            <p>99.28%</p>
+            <small>
+                Overall computer vision detection rate
+            </small>
+        </div>
+
+
+        <div class="card insight-card">
+            <h3>Priority Defect</h3>
+            <p>Thread Side</p>
+            <small>
+                Detection rate: 95.65%
+            </small>
+        </div>
+
+
+        <div class="card insight-card">
+            <h3>Production Quality</h3>
+            <p>93.36%</p>
+            <small>
+                Good units out of total production
+            </small>
+        </div>
+
+    </div>
+
+<!-- How It Works -->
+
+<section class="workflow-section">
+
+    <h2>How Smart Quality Intelligence Works</h2>
+
+    <p class="workflow-subtitle">
+        An end-to-end AI workflow for manufacturing quality monitoring,
+        prediction, inspection, and business analysis.
+    </p>
+
+    <div class="workflow">
+
+        <div class="workflow-step">
+
+            <div class="workflow-icon">📊</div>
+            <h3>Production Data</h3>
+
+            <p>
+                Production-process features are collected and
+                prepared for analysis.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">→</div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-icon">🤖</div>
+            <h3>ML Prediction</h3>
+
+            <p>
+                The trained Random Forest model predicts
+                product quality and defect probability.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">→</div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-icon">👁️</div>
+            <h3>Computer Vision</h3>
+
+            <p>
+                Product images are analyzed to identify
+                visual defects and anomalies.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">→</div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-icon">🔍</div>
+            <h3>Root Cause Analysis</h3>
+
+            <p>
+                Important process features associated with
+                quality problems are identified.
+            </p>
+
+        </div>
+
+
+        <div class="workflow-arrow">→</div>
+
+
+        <div class="workflow-step">
+
+            <div class="workflow-icon">📈</div>
+            <h3>Business Insights</h3>
+
+            <p>
+                Results are converted into quality, loss,
+                savings, and management insights.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+    <footer>
+        <p>Smart Quality Intelligence | AI + Computer Vision</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quality Prediction | Smart Quality Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="header-content">
+
+        <div>
+            <h1>Smart Quality Intelligence</h1>
+
+            <p>
+                AI-Powered Manufacturing Quality Control
+            </p>
+        </div>
+
+        <nav>
+
+    <a href="index.html">
+        Dashboard
+    </a>
+
+    <a href="prediction.html" class="active">
+        Quality Prediction
+    </a>
+
+    <a href="analytics.html">
+        Analytics
+    </a>
+
+    </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- ============================= -->
+    <!-- PAGE INTRODUCTION -->
+    <!-- ============================= -->
+
+    <section class="hero">
+
+        <h2>Production Quality Prediction</h2>
+
+        <p>
+            Enter the selected production-process features
+            to predict product quality using the trained
+            Random Forest model.
+        </p>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- PRODUCTION INPUT -->
+    <!-- ============================= -->
+
+    <section class="prediction-box">
+
+        <h2>Production Input</h2>
+
+        <p class="input-info">
+    Enter the production sensor values for the selected 30 features.
+    The trained Random Forest model will estimate the probability
+    that the product is defective.
+</p>
+
+<div class="prediction-info-box">
+
+    <div>
+        <strong>Model</strong>
+        <span>Random Forest</span>
+    </div>
+
+    <div>
+        <strong>Features</strong>
+        <span>30 production features</span>
+    </div>
+
+    <div>
+        <strong>Output</strong>
+        <span>Quality status + defect probability</span>
+    </div>
+
+</div>
+
+
+        <div class="input-grid">
+
+
+            <div>
+                <label>Feature 577</label>
+                <input
+                    type="number"
+                    id="577"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 130</label>
+                <input
+                    type="number"
+                    id="130"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 91</label>
+                <input
+                    type="number"
+                    id="91"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 510</label>
+                <input
+                    type="number"
+                    id="510"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 309</label>
+                <input
+                    type="number"
+                    id="309"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 103</label>
+                <input
+                    type="number"
+                    id="103"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 331</label>
+                <input
+                    type="number"
+                    id="331"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 125</label>
+                <input
+                    type="number"
+                    id="125"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 477</label>
+                <input
+                    type="number"
+                    id="477"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 573</label>
+                <input
+                    type="number"
+                    id="573"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 65</label>
+                <input
+                    type="number"
+                    id="65"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 126</label>
+                <input
+                    type="number"
+                    id="126"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 56</label>
+                <input
+                    type="number"
+                    id="56"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 269</label>
+                <input
+                    type="number"
+                    id="269"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 519</label>
+                <input
+                    type="number"
+                    id="519"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 288</label>
+                <input
+                    type="number"
+                    id="288"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 132</label>
+                <input
+                    type="number"
+                    id="132"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 307</label>
+                <input
+                    type="number"
+                    id="307"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 122</label>
+                <input
+                    type="number"
+                    id="122"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 267</label>
+                <input
+                    type="number"
+                    id="267"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 33</label>
+                <input
+                    type="number"
+                    id="33"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 489</label>
+                <input
+                    type="number"
+                    id="489"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 137</label>
+                <input
+                    type="number"
+                    id="137"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 146</label>
+                <input
+                    type="number"
+                    id="146"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 416</label>
+                <input
+                    type="number"
+                    id="416"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 131</label>
+                <input
+                    type="number"
+                    id="131"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 247</label>
+                <input
+                    type="number"
+                    id="247"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 138</label>
+                <input
+                    type="number"
+                    id="138"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 270</label>
+                <input
+                    type="number"
+                    id="270"
+                    step="any"
+                    value="0">
+            </div>
+
+
+            <div>
+                <label>Feature 121</label>
+                <input
+                    type="number"
+                    id="121"
+                    step="any"
+                    value="0">
+            </div>
+
+
+        </div>
+
+    <div class="prediction-explanation">
+    <h3>How the AI Prediction Works</h3>
+
+    <div class="prediction-flow">
+        <div class="prediction-flow-step">
+            <span>01</span>
+            <strong>Production Data</strong>
+            <p>Enter the selected production-process feature values.</p>
+        </div>
+
+        <div class="prediction-flow-arrow">→</div>
+
+        <div class="prediction-flow-step">
+            <span>02</span>
+            <strong>Random Forest</strong>
+            <p>The trained ML model analyzes the production pattern.</p>
+        </div>
+
+        <div class="prediction-flow-arrow">→</div>
+
+        <div class="prediction-flow-step">
+            <span>03</span>
+            <strong>Defect Probability</strong>
+            <p>The system calculates the probability of a defective product.</p>
+        </div>
+
+        <div class="prediction-flow-arrow">→</div>
+
+        <div class="prediction-flow-step">
+            <span>04</span>
+            <strong>Quality Status</strong>
+            <p>The result is classified as GOOD or DEFECTIVE with a risk level.</p>
+        </div>
+    </div>
+</div>
+
+
+        <button onclick="predictQuality()">
+
+            PREDICT QUALITY
+
+        </button>
+
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- PREDICTION RESULT -->
+    <!-- ============================= -->
+
+    <section class="prediction-result">
+
+    <h2>Prediction Result</h2>
+
+    <div class="prediction-result-grid">
+
+        <div class="prediction-result-card">
+            <h3>Quality Status</h3>
+            <p id="predictionResult">--</p>
+        </div>
+
+        <div class="prediction-result-card">
+            <h3>Defect Probability</h3>
+            <p id="probabilityResult">--</p>
+        </div>
+
+        <div class="prediction-result-card">
+            <h3>Risk Level</h3>
+            <p id="riskResult">--</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="result-guide">
+
+    <h2>Understanding the Prediction</h2>
+
+    <div class="result-guide-grid">
+
+        <div class="result-guide-card">
+            <h3>GOOD</h3>
+            <p>
+                The model estimates a lower probability of the product being defective
+                based on the entered production features.
+            </p>
+        </div>
+
+        <div class="result-guide-card">
+            <h3>DEFECTIVE</h3>
+            <p>
+                The model estimates a higher probability of a quality defect based
+                on the entered production features.
+            </p>
+        </div>
+
+        <div class="result-guide-card">
+            <h3>Risk Level</h3>
+            <p>
+                The risk indicator summarizes the predicted defect probability
+                as Low, Medium, or High.
+            </p>
+        </div>
+
+    </div>
+
+    <p class="result-note">
+        The prediction is generated from the trained Random Forest model using
+        the selected production-process features.
+    </p>
+
+</section>
+
+</main>
+
+
+
+<!-- ============================= -->
+<!-- FOOTER -->
+<!-- ============================= -->
+
+<footer>
+
+    <p>
+        Smart Quality Intelligence
+        | AI + Computer Vision
+    </p>
+
+</footer>
+
+
+
+<!-- ============================= -->
+<!-- JAVASCRIPT -->
+<!-- ============================= -->
+
+<script>
+
+
+async function predictQuality() {
+
+
+    // --------------------------------
+    // Selected model features
+    // --------------------------------
+
+    const featureNames = [
+
+        "577",
+        "130",
+        "91",
+        "510",
+        "309",
+        "103",
+        "331",
+        "125",
+        "477",
+        "573",
+        "65",
+        "126",
+        "56",
+        "269",
+        "519",
+        "288",
+        "132",
+        "307",
+        "122",
+        "267",
+        "33",
+        "489",
+        "137",
+        "146",
+        "416",
+        "131",
+        "247",
+        "138",
+        "270",
+        "121"
+
+    ];
+
+
+    // --------------------------------
+    // Create input data
+    // --------------------------------
+
+    const data = {};
+
+
+    for (const feature of featureNames) {
+
+
+        const value =
+            document
+                .getElementById(feature)
+                .value;
+
+
+        data[feature] =
+            Number(value);
+
+
+    }
+
+
+    // --------------------------------
+    // Result elements
+    // --------------------------------
+
+    const resultText =
+        document.getElementById(
+            "predictionResult"
+        );
+
+
+    const probabilityText =
+        document.getElementById(
+            "probabilityResult"
+        );
+
+
+    const riskText =
+        document.getElementById(
+            "riskResult"
+        );
+
+
+    // --------------------------------
+    // Loading state
+    // --------------------------------
+
+    resultText.textContent =
+        "Running AI prediction...";
+
+
+    probabilityText.textContent =
+        "--";
+
+
+    riskText.textContent =
+        "Analyzing...";
+
+
+    // --------------------------------
+    // Send data to Flask
+    // --------------------------------
+
+    try {
+
+
+        const response =
+            await fetch(
+                "http://127.0.0.1:5000/api/predict",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(data)
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        // --------------------------------
+        // Successful prediction
+        // --------------------------------
+
+        if (result.status === "success") {
+
+
+            const probability =
+                result.defect_probability;
+
+
+            // Quality status
+
+            resultText.textContent =
+                result.prediction;
+
+            // Quality status color
+
+resultText.classList.remove(
+    "result-good",
+    "result-defective"
+);
+
+if (result.prediction === "GOOD") {
+
+    resultText.classList.add("result-good");
+
+} else {
+
+    resultText.classList.add("result-defective");
+
+}
+
+
+            // Defect probability
+
+            probabilityText.textContent =
+                probability + "%";
+
+
+            // --------------------------------
+            // Risk calculation
+            // --------------------------------
+
+            if (probability < 40) {
+
+    riskText.textContent =
+        "LOW";
+
+    riskText.classList.remove(
+        "risk-medium",
+        "risk-high"
+    );
+
+    riskText.classList.add("risk-low");
+
+}
+
+else if (probability < 70) {
+
+    riskText.textContent =
+        "MEDIUM";
+
+    riskText.classList.remove(
+        "risk-low",
+        "risk-high"
+    );
+
+    riskText.classList.add("risk-medium");
+
+}
+
+else {
+
+    riskText.textContent =
+        "HIGH";
+
+    riskText.classList.remove(
+        "risk-low",
+        "risk-medium"
+    );
+
+    riskText.classList.add("risk-high");
+
+            }
+    }
+
+
+        // --------------------------------
+        // Prediction error
+        // --------------------------------
+
+        else {
+
+
+            resultText.textContent =
+                "Prediction Error";
+
+
+            probabilityText.textContent =
+                "--";
+
+
+            riskText.textContent =
+                "Unable to determine";
+
+
+        }
+
+
+    }
+
+
+    // --------------------------------
+    // Backend connection error
+    // --------------------------------
+
+    catch (error) {
+
+
+        console.error(error);
+
+
+        resultText.textContent =
+            "Could not connect to Flask.";
+
+
+        probabilityText.textContent =
+            "--";
+
+
+        riskText.textContent =
+            "Unavailable";
+
+
+    }
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

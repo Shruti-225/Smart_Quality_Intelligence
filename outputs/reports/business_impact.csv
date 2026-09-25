@@ -1,0 +1,2 @@
+total_units,good_units,defective_units,defect_rate,cost_per_defective_unit,estimated_quality_loss,potential_defect_reduction,potential_savings
+1567,1463,104,0.06636885768985322,500,52000,26.0,13000.0

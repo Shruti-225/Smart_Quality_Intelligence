@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics | Smart Quality Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="header-content">
+
+        <div>
+
+            <h1>Smart Quality Intelligence</h1>
+
+            <p>
+                AI-Powered Manufacturing Quality Control
+            </p>
+
+        </div>
+
+
+        <nav>
+
+            <a href="index.html">
+                Dashboard
+            </a>
+
+            <a href="prediction.html">
+                Quality Prediction
+            </a>
+
+            <a href="analytics.html" class="active">
+                Analytics
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+    <!-- ============================= -->
+    <!-- PAGE INTRODUCTION -->
+    <!-- ============================= -->
+
+    <section class="hero">
+
+        <h2>Quality Analytics</h2>
+
+        <p>
+            Detailed analysis of production quality,
+            machine learning performance, computer vision,
+            and business impact.
+        </p>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- PRODUCTION ANALYTICS -->
+    <!-- ============================= -->
+
+    <section class="analytics-section">
+
+        <h2>Production Quality</h2>
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>Total Production</h3>
+
+                <p id="analyticsTotalProduction">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Good Units</h3>
+
+                <p id="analyticsGoodUnits">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Defective Units</h3>
+
+                <p id="analyticsDefectiveUnits">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Defect Rate</h3>
+
+                <p id="analyticsDefectRate">
+                    Loading...
+                </p>
+
+            </div>
+
+
+        </div>
+
+    <section class="analytics-section">
+
+    <h2>Production Quality Distribution</h2>
+
+    <div class="chart-box">
+
+        <h3>Good vs Defective Units</h3>
+
+        <div class="quality-chart">
+
+            <div class="chart-row">
+
+                <span class="chart-label">
+                    Good Units
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar good-bar"
+                        style="width: 93.36%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    1463
+                </span>
+
+            </div>
+
+
+            <div class="chart-row">
+
+                <span class="chart-label">
+                    Defective Units
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar defective-bar"
+                        style="width: 6.64%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    104
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+        </div>
+
+</section>
+
+<!-- ============================= -->
+<!-- MACHINE LEARNING ANALYTICS -->
+<!-- ============================= -->
+
+<section class="analytics-section">
+
+    <h2>Machine Learning Performance</h2>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Highest ROC-AUC Model</h3>
+
+            <p id="analyticsBestModel">
+                Loading...
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Random Forest ROC-AUC</h3>
+
+            <p id="analyticsRocAuc">
+                Loading...
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Random Forest F1 Score</h3>
+
+            <p id="analyticsF1">
+                Loading...
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Model Status</h3>
+
+            <p>
+                Trained
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ============================= -->
+<!-- MODEL PERFORMANCE INSIGHTS -->
+<!-- ============================= -->
+
+<section class="model-insight-section">
+
+    <h2>Model Performance Insights</h2>
+
+    <div class="model-insight-grid">
+
+        <div class="model-insight-card">
+
+            <h3>Logistic Regression</h3>
+
+            <div class="metric-row">
+                <span>ROC-AUC</span>
+                <strong>0.5857</strong>
+            </div>
+
+            <div class="metric-row">
+                <span>F1 Score</span>
+                <strong>0.1391</strong>
+            </div>
+
+            <div class="metric-row">
+                <span>Defect Recall</span>
+                <strong>38.10%</strong>
+            </div>
+
+        </div>
+
+
+        <div class="model-insight-card highlight-model">
+
+            <h3>Random Forest</h3>
+
+            <div class="metric-row">
+                <span>ROC-AUC</span>
+                <strong>0.7605</strong>
+            </div>
+
+            <div class="metric-row">
+                <span>F1 Score</span>
+                <strong>0.1667</strong>
+            </div>
+
+            <div class="metric-row">
+                <span>Defect Recall</span>
+                <strong>9.52%</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="model-note">
+
+        <strong>Evaluation note:</strong>
+
+        Random Forest achieved the higher ROC-AUC and F1 score among the
+        tested production models. Its defect recall remains limited,
+        indicating that further model tuning and additional defect-focused
+        data could improve detection of defective units.
+
+    </div>
+
+</section>
+
+
+
+    <!-- ============================= -->
+    <!-- COMPUTER VISION -->
+    <!-- ============================= -->
+
+    <section class="analytics-section">
+
+        <h2>Computer Vision Analytics</h2>
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>Vision Detection Rate</h3>
+
+                <p id="analyticsVisionRate">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Most Difficult Defect</h3>
+
+                <p id="analyticsDifficultDefect">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Difficult Defect Detection</h3>
+
+                <p id="analyticsDifficultRate">
+                    Loading...
+                </p>
+
+            </div>
+
+
+        </div>
+
+    <section class="analytics-section">
+
+    <h2>Computer Vision Defect Performance</h2>
+
+    <div class="chart-box">
+
+        <h3>Detection Rate by Defect Category</h3>
+
+        <div class="model-chart">
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Good
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar vision-bar"
+                        style="width: 100%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Manipulated Front
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar vision-bar"
+                        style="width: 100%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Scratch Head
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar vision-bar"
+                        style="width: 100%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Scratch Neck
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div class="chart-bar vision-bar"
+                         style="width: 100%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Thread Top
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar vision-bar"
+                        style="width: 100%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    100%
+                </span>
+
+            </div>
+
+
+            <div class="model-row">
+
+                <span class="chart-label">
+                    Thread Side
+                </span>
+
+                <div class="chart-bar-container">
+
+                    <div
+                        class="chart-bar vision-bar"
+                        style="width: 95.65%;">
+                    </div>
+
+                </div>
+
+                <span class="chart-value">
+                    95.65%
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+    <!-- ============================= -->
+    <!-- BUSINESS IMPACT -->
+    <!-- ============================= -->
+
+    <section class="analytics-section">
+
+        <h2>Business Impact</h2>
+
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>Estimated Quality Loss</h3>
+
+                <p id="analyticsQualityLoss">
+                    Loading...
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Potential Savings</h3>
+
+                <p id="analyticsPotentialSavings">
+                    Loading...
+                </p>
+
+            </div>
+
+
+        </div>
+
+        <div class="chart-box">
+
+    <h3>Quality Loss vs Potential Savings</h3>
+
+    <div class="business-chart">
+
+        <div class="business-row">
+
+            <div class="business-label">
+                <span>Estimated Quality Loss</span>
+                <strong>₹52,000</strong>
+            </div>
+
+            <div class="business-bar-container">
+
+                <div
+                    class="business-bar loss-bar"
+                    style="width: 100%;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="business-row">
+
+            <div class="business-label">
+                <span>Potential Savings</span>
+                <strong>₹13,000</strong>
+            </div>
+
+            <div class="business-bar-container">
+
+                <div
+                    class="business-bar savings-bar"
+                    style="width: 25%;">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <p class="business-note">
+        Potential savings represent the estimated savings from reducing
+        approximately 26 defective units.
+    </p>
+
+</div>
+
+    </section>
+
+
+
+    <!-- ============================= -->
+    <!-- ANALYTICS SUMMARY -->
+    <!-- ============================= -->
+
+    <section class="result-box">
+
+        <h2>Analytics Summary</h2>
+
+        <p id="analyticsStatus">
+            Loading analytics from Smart Quality Backend...
+        </p>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        Smart Quality Intelligence
+        | AI + Computer Vision
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+async function loadAnalytics() {
+
+
+    try {
+
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/dashboard"
+        );
+
+
+        const data =
+            await response.json();
+
+
+        // --------------------------------
+        // Production
+        // --------------------------------
+
+        document.getElementById(
+            "analyticsTotalProduction"
+        ).textContent =
+            data.total_production;
+
+
+        document.getElementById(
+            "analyticsGoodUnits"
+        ).textContent =
+            data.good_units;
+
+
+        document.getElementById(
+            "analyticsDefectiveUnits"
+        ).textContent =
+            data.defective_units;
+
+
+        document.getElementById(
+            "analyticsDefectRate"
+        ).textContent =
+            data.defect_rate + "%";
+
+
+        // --------------------------------
+        // Machine Learning
+        // --------------------------------
+
+        document.getElementById(
+            "analyticsBestModel"
+        ).textContent =
+            data.best_model;
+
+
+        document.getElementById(
+            "analyticsRocAuc"
+        ).textContent =
+            data.best_model_roc_auc;
+
+
+        document.getElementById(
+            "analyticsF1"
+        ).textContent =
+            data.best_model_f1;
+
+
+        // --------------------------------
+        // Computer Vision
+        // --------------------------------
+
+        document.getElementById(
+            "analyticsVisionRate"
+        ).textContent =
+            data.vision_detection_rate + "%";
+
+
+        document.getElementById(
+            "analyticsDifficultDefect"
+        ).textContent =
+            data.difficult_defect;
+
+
+        document.getElementById(
+            "analyticsDifficultRate"
+        ).textContent =
+            data.difficult_defect_rate + "%";
+
+
+        // --------------------------------
+        // Business Impact
+        // --------------------------------
+
+        document.getElementById(
+            "analyticsQualityLoss"
+        ).textContent =
+            "₹" +
+            Number(
+                data.quality_loss
+            ).toLocaleString("en-IN");
+
+
+        document.getElementById(
+            "analyticsPotentialSavings"
+        ).textContent =
+            "₹" +
+            Number(
+                data.potential_savings
+            ).toLocaleString("en-IN");
+
+
+        // --------------------------------
+        // Status
+        // --------------------------------
+
+        document.getElementById(
+            "analyticsStatus"
+        ).textContent =
+            "✓ Analytics loaded successfully from Smart Quality Backend";
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(error);
+
+
+        document.getElementById(
+            "analyticsStatus"
+        ).textContent =
+            "✗ Could not connect to Smart Quality Backend. Please start Flask.";
+
+
+    }
+
+
+}
+
+
+loadAnalytics();
+
+
+</script>
+
+
+</body>
+
+</html>
