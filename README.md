@@ -152,6 +152,16 @@ Provides detailed:
 
 ---
 
+## ⚙️ Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Shruti-225/Smart_Quality_Intelligence.git
+cd Smart_Quality_Intelligence
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Programming
