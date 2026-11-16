@@ -1,0 +1,26 @@
+feature_set,category,detected,total,recall
+All 10 Features,manipulated_front,0,24,0.0
+All 10 Features,scratch_head,3,24,0.125
+All 10 Features,scratch_neck,5,25,0.2
+All 10 Features,thread_side,1,23,0.043478260869565216
+All 10 Features,thread_top,2,23,0.08695652173913043
+Selected 6 Features,manipulated_front,0,24,0.0
+Selected 6 Features,scratch_head,3,24,0.125
+Selected 6 Features,scratch_neck,6,25,0.24
+Selected 6 Features,thread_side,0,23,0.0
+Selected 6 Features,thread_top,3,23,0.13043478260869565
+Local Contrast Only,manipulated_front,0,24,0.0
+Local Contrast Only,scratch_head,3,24,0.125
+Local Contrast Only,scratch_neck,9,25,0.36
+Local Contrast Only,thread_side,0,23,0.0
+Local Contrast Only,thread_top,3,23,0.13043478260869565
+Gradient Only,manipulated_front,1,24,0.041666666666666664
+Gradient Only,scratch_head,3,24,0.125
+Gradient Only,scratch_neck,4,25,0.16
+Gradient Only,thread_side,2,23,0.08695652173913043
+Gradient Only,thread_top,2,23,0.08695652173913043
+LBP and Edge Only,manipulated_front,0,24,0.0
+LBP and Edge Only,scratch_head,1,24,0.041666666666666664
+LBP and Edge Only,scratch_neck,0,25,0.0
+LBP and Edge Only,thread_side,1,23,0.043478260869565216
+LBP and Edge Only,thread_top,1,23,0.043478260869565216

@@ -1,0 +1,2 @@
+Images_Analyzed,Total_Foreground_Pixels,Total_Defect_Pixels_Inside,Macro_Contrast_ROC_AUC,Pooled_Contrast_ROC_AUC,Macro_Intensity_ROC_AUC,Pooled_Intensity_ROC_AUC,Macro_Top10_Contrast_Precision,Macro_Top10_Contrast_Recall
+24,54527,796,0.9348337699693864,0.8854579564364413,0.4095222647838637,0.35747601886898145,0.10464773878894,0.843461473258122

@@ -1,0 +1,11 @@
+Category,Method,Foreground_Percent,Defect_Inside_Percent,Defect_Outside_Percent,Foreground_Border_Percent,Largest_Component_Share_Percent,Connected_Component_Count,Bounding_Box_Fill_Percent,Foreground_Mean_Intensity,Outside_Mean_Intensity,Foreground_Intensity_Std
+manipulated_front,otsu_baseline,13.7121,49.5801,50.4199,0.0,100.0,1.0,39.8491,105.8814,195.6596,27.1167
+manipulated_front,otsu_no_opening,13.8669,56.735,43.265,0.0,99.99,1.0417,39.4773,106.2089,195.7691,27.2409
+scratch_head,otsu_baseline,13.9267,98.0952,1.9048,0.035,100.0,1.0,38.7117,113.5607,201.0763,27.4899
+scratch_head,otsu_no_opening,14.2466,100.0,0.0,0.0446,100.0,1.0,37.9568,114.0816,201.3218,27.6377
+scratch_neck,otsu_baseline,13.6892,81.1594,18.8406,0.0409,99.9983,1.04,35.216,114.0081,199.449,26.8835
+scratch_neck,otsu_no_opening,13.9792,89.9954,10.0046,0.0451,100.0,1.0,34.9714,114.4644,199.6609,27.0388
+thread_side,otsu_baseline,13.7403,93.2722,6.7278,0.0435,100.0,1.0,36.9549,110.7584,198.5817,27.2154
+thread_side,otsu_no_opening,13.9142,93.9654,6.0346,0.0482,100.0,1.0,36.1011,111.0616,198.7113,27.2949
+thread_top,otsu_baseline,14.2371,92.1082,7.8918,0.0454,100.0,1.0,38.0927,114.7639,198.4331,27.3615
+thread_top,otsu_no_opening,14.4998,96.6709,3.3291,0.0466,99.998,1.0435,37.4497,115.2117,198.6147,27.5022

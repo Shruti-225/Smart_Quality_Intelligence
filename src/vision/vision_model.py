@@ -1,10 +1,14 @@
+
 from pathlib import Path
+import json
 
 import cv2
+import joblib
 import numpy as np
 import pandas as pd
 
 from sklearn.ensemble import IsolationForest
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     classification_report,
     confusion_matrix,
@@ -12,316 +16,245 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
     f1_score,
+    balanced_accuracy_score,
 )
 
 
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
 RANDOM_STATE = 42
 IMAGE_SIZE = (128, 128)
+CALIBRATION_PERCENTILE = 95
+
+ROOT_DIR = Path(__file__).resolve().parents[2]
+
+DATASET_DIR = ROOT_DIR / "data" / "raw" / "images" / "screw"
+
+MODEL_DIR = ROOT_DIR / "outputs" / "models"
+REPORT_DIR = ROOT_DIR / "outputs" / "reports" / "vision"
+
+MODEL_PATH = MODEL_DIR / "vision_isolation_forest.pkl"
+METADATA_PATH = MODEL_DIR / "vision_model_metadata.json"
 
 
-def get_project_root() -> Path:
-    """Return the project root directory."""
+# ============================================================
+# DIRECTORY SETUP
+# ============================================================
 
-    return Path(__file__).resolve().parents[2]
-
-
-def get_dataset_root() -> Path:
-    """Return the MVTec screw dataset directory."""
-
-    return (
-        get_project_root()
-        / "data"
-        / "raw"
-        / "images"
-        / "screw"
-    )
+def create_directories():
+    MODEL_DIR.mkdir(parents=True, exist_ok=True)
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def load_image(image_path: Path) -> np.ndarray:
-    """Load an image using OpenCV."""
+# ============================================================
+# IMAGE LOADING
+# ============================================================
 
-    image = cv2.imread(
-        str(image_path)
-    )
+def load_image(image_path):
+    image = cv2.imread(str(image_path))
 
     if image is None:
-        raise ValueError(
-            f"Unable to read image: {image_path}"
-        )
+        raise ValueError(f"Unable to read image: {image_path}")
+
+    image = cv2.resize(image, IMAGE_SIZE)
 
     return image
 
 
-def extract_image_features(
-    image_path: Path
-) -> np.ndarray:
+# ============================================================
+# FEATURE EXTRACTION
+# ============================================================
+
+def extract_image_features(image_path):
     """
-    Extract compact visual features from a screw image.
+    Extract 103 features from an image.
 
-    Features include:
-    - grayscale intensity statistics
-    - edge statistics
-    - texture information
-    - spatial intensity information
+    Features:
+    1. Five intensity statistics
+    2. Thirty-two histogram features
+    3. Edge density
+    4. Laplacian variance
+    5. Sixty-four spatial cell means
     """
 
-    image = load_image(
-        image_path
-    )
+    image = load_image(image_path)
 
-    image = cv2.resize(
-        image,
-        IMAGE_SIZE
-    )
-
-    gray = cv2.cvtColor(
-        image,
-        cv2.COLOR_BGR2GRAY
-    )
-
-    gray_normalized = (
-        gray.astype(
-            np.float32
-        ) / 255.0
-    )
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     features = []
 
-    # ---------------------------------
-    # 1. Global intensity statistics
-    # ---------------------------------
-
+    # 1. Intensity statistics: 5 features
     features.extend([
-        np.mean(gray_normalized),
-        np.std(gray_normalized),
-        np.min(gray_normalized),
-        np.max(gray_normalized),
-        np.median(gray_normalized),
+        np.mean(gray),
+        np.std(gray),
+        np.min(gray),
+        np.max(gray),
+        np.median(gray),
     ])
 
-    # ---------------------------------
-    # 2. Histogram features
-    # ---------------------------------
-
+    # 2. Histogram: 32 features
     histogram = cv2.calcHist(
         [gray],
         [0],
         None,
         [32],
-        [0, 256]
+        [0, 256],
     )
 
-    histogram = (
-        histogram.flatten()
-        / histogram.sum()
+    histogram = cv2.normalize(
+        histogram,
+        histogram,
     )
 
-    features.extend(
-        histogram.tolist()
-    )
+    features.extend(histogram.flatten())
 
-    # ---------------------------------
-    # 3. Edge features
-    # ---------------------------------
+    # 3. Edge density: 1 feature
+    edges = cv2.Canny(gray, 50, 150)
 
-    edges = cv2.Canny(
-        gray,
-        50,
-        150
-    )
+    edge_density = np.mean(edges > 0)
 
-    edge_density = (
-        np.mean(edges > 0)
-    )
+    features.append(edge_density)
 
-    features.append(
-        edge_density
-    )
-
-    # ---------------------------------
-    # 4. Texture features
-    # ---------------------------------
-
+    # 4. Laplacian variance: 1 feature
     laplacian = cv2.Laplacian(
         gray,
-        cv2.CV_64F
+        cv2.CV_64F,
     )
 
-    texture_variance = (
-        laplacian.var()
-    )
+    features.append(laplacian.var())
 
-    features.append(
-        texture_variance
-    )
-
-    # ---------------------------------
-    # 5. Spatial intensity features
-    # ---------------------------------
-
+    # 5. Spatial cell means: 64 features
     height, width = gray.shape
 
-    grid_size = 8
+    cell_height = height // 8
+    cell_width = width // 8
 
-    cell_height = (
-        height // grid_size
-    )
+    for row in range(8):
+        for col in range(8):
 
-    cell_width = (
-        width // grid_size
-    )
+            cell = gray[
+                row * cell_height:(row + 1) * cell_height,
+                col * cell_width:(col + 1) * cell_width,
+            ]
 
-    for row in range(grid_size):
+            features.append(np.mean(cell))
 
-        for column in range(grid_size):
+    result = np.asarray(features, dtype=np.float64)
 
-            y_start = (
-                row * cell_height
-            )
-
-            y_end = (
-                (row + 1)
-                * cell_height
-            )
-
-            x_start = (
-                column * cell_width
-            )
-
-            x_end = (
-                (column + 1)
-                * cell_width
-            )
-
-            cell = (
-                gray_normalized[
-                    y_start:y_end,
-                    x_start:x_end
-                ]
-            )
-
-            features.append(
-                np.mean(cell)
-            )
-
-    return np.array(
-        features,
-        dtype=np.float32
-    )
-
-
-def collect_dataset(
-    dataset_root: Path
-):
-    """Collect training and testing images."""
-
-    train_directory = (
-        dataset_root
-        / "train"
-        / "good"
-    )
-
-    train_images = sorted(
-        train_directory.glob("*.png")
-    )
-
-    test_categories = {
-        "good": 0,
-        "manipulated_front": 1,
-        "scratch_head": 1,
-        "scratch_neck": 1,
-        "thread_side": 1,
-        "thread_top": 1,
-    }
-
-    test_images = []
-    test_labels = []
-    test_category_names = []
-
-    for category, label in (
-        test_categories.items()
-    ):
-
-        category_directory = (
-            dataset_root
-            / "test"
-            / category
+    if len(result) != 103:
+        raise ValueError(
+            f"Expected 103 features, got {len(result)}"
         )
 
-        images = sorted(
-            category_directory.glob(
-                "*.png"
-            )
+    return result
+
+
+# ============================================================
+# DATASET COLLECTION
+# ============================================================
+
+def collect_training_images():
+    training_dir = DATASET_DIR / "train" / "good"
+
+    if not training_dir.exists():
+        raise FileNotFoundError(
+            f"Training directory not found: {training_dir}"
         )
 
-        test_images.extend(
-            images
+    image_paths = sorted([
+        path
+        for path in training_dir.iterdir()
+        if path.suffix.lower() in [".png", ".jpg", ".jpeg"]
+    ])
+
+    if len(image_paths) < 2:
+        raise ValueError(
+            "At least two good training images are required."
         )
 
-        test_labels.extend(
-            [label] * len(images)
+    return image_paths
+
+
+def collect_testing_images():
+    testing_dir = DATASET_DIR / "test"
+
+    if not testing_dir.exists():
+        raise FileNotFoundError(
+            f"Testing directory not found: {testing_dir}"
         )
 
-        test_category_names.extend(
-            [category] * len(images)
-        )
+    image_paths = []
+    labels = []
+    categories = []
 
-    return (
-        train_images,
-        test_images,
-        np.array(test_labels),
-        test_category_names,
-    )
+    category_folders = sorted([
+        folder
+        for folder in testing_dir.iterdir()
+        if folder.is_dir()
+    ])
+
+    for folder in category_folders:
+
+        category = folder.name
+
+        if category.lower() == "good":
+            label = 0
+        else:
+            label = 1
+
+        for image_path in sorted(folder.iterdir()):
+
+            if image_path.suffix.lower() not in [
+                ".png", ".jpg", ".jpeg"
+            ]:
+                continue
+
+            image_paths.append(image_path)
+            labels.append(label)
+            categories.append(category)
+
+    if not image_paths:
+        raise ValueError("No testing images were found.")
+
+    return image_paths, np.asarray(labels), categories
 
 
-def build_feature_matrix(
-    image_paths,
-    dataset_name
-):
-    """Build a feature matrix from image files."""
+# ============================================================
+# FEATURE MATRIX CREATION
+# ============================================================
 
-    print(
-        f"\nExtracting features from "
-        f"{dataset_name}..."
-    )
+def build_feature_matrix(image_paths, description):
 
     features = []
 
-    total = len(
-        image_paths
-    )
+    print(f"\nExtracting features from {description}...")
 
-    for index, image_path in enumerate(
-        image_paths,
-        start=1
-    ):
+    total = len(image_paths)
 
-        feature_vector = (
-            extract_image_features(
-                image_path
-            )
-        )
+    for index, image_path in enumerate(image_paths, start=1):
 
-        features.append(
-            feature_vector
-        )
+        try:
+            feature_vector = extract_image_features(image_path)
+            features.append(feature_vector)
+
+        except Exception as error:
+            raise RuntimeError(
+                f"Feature extraction failed for {image_path}: {error}"
+            ) from error
 
         if index % 50 == 0 or index == total:
+            print(f"Processed {index}/{total} images")
 
-            print(
-                f"Processed "
-                f"{index}/{total} images"
-            )
-
-    return np.array(
-        features
-    )
+    return np.asarray(features, dtype=np.float64)
 
 
-def train_anomaly_detector(
-    training_features
-):
-    """Train Isolation Forest using only good images."""
+# ============================================================
+# MODEL TRAINING
+# ============================================================
+
+def train_anomaly_detector(training_features):
 
     model = IsolationForest(
         n_estimators=300,
@@ -330,455 +263,433 @@ def train_anomaly_detector(
         n_jobs=-1,
     )
 
-    model.fit(
-        training_features
-    )
+    model.fit(training_features)
 
     return model
 
 
-def calculate_scores(
-    model,
-    features
-):
-    """Calculate anomaly scores."""
+# ============================================================
+# ANOMALY SCORE CALCULATION
+# ============================================================
 
-    return model.decision_function(
-        features
-    )
-
-
-def determine_threshold(
-    training_scores
-):
+def calculate_scores(model, features):
     """
-    Determine anomaly threshold using
-    the lower 5th percentile of normal
-    training scores.
+    IsolationForest decision_function:
+        Higher = more normal
+        Lower  = more anomalous
+
+    We reverse the sign so that:
+        Higher anomaly score = more anomalous
+        Lower anomaly score  = more normal
     """
 
-    return np.percentile(
-        training_scores,
-        5
+    return -model.decision_function(features)
+
+
+# ============================================================
+# THRESHOLD CALIBRATION
+# ============================================================
+
+def determine_threshold(normal_scores):
+
+    threshold = np.percentile(
+        normal_scores,
+        CALIBRATION_PERCENTILE,
     )
 
-def analyze_thresholds(
-    y_true,
-    scores
-):
-    """Evaluate multiple thresholds and select a balanced threshold."""
+    return float(threshold)
 
-    thresholds = np.linspace(
-        scores.min(),
-        scores.max(),
-        100
-    )
 
-    results = []
+# ============================================================
+# SAVE MODEL AND METADATA
+# ============================================================
 
-    for threshold in thresholds:
+def save_model_artifacts(model, threshold):
 
-        predictions = (
-            scores >= threshold
-        ).astype(int)
+    joblib.dump(model, MODEL_PATH)
 
-        precision = precision_score(
-            y_true,
-            predictions,
-            zero_division=0
-        )
+    metadata = {
+        "threshold": float(threshold),
+        "image_size": list(IMAGE_SIZE),
+        "random_state": RANDOM_STATE,
+        "feature_count": 103,
+        "score_type": "negative_decision_function",
+        "prediction_rule": "anomaly_score >= threshold",
+        "calibration_percentile": CALIBRATION_PERCENTILE,
+        "dataset": "MVTec AD Screw",
+    }
 
-        recall = recall_score(
-            y_true,
-            predictions,
-            zero_division=0
-        )
+    with open(METADATA_PATH, "w", encoding="utf-8") as file:
+        json.dump(metadata, file, indent=4)
 
-        f1 = f1_score(
-            y_true,
-            predictions,
-            zero_division=0
-        )
+    print(f"\nModel saved: {MODEL_PATH}")
+    print(f"Metadata saved: {METADATA_PATH}")
 
-        true_positive = np.sum(
-            (y_true == 1) &
-            (predictions == 1)
-        )
 
-        true_negative = np.sum(
-            (y_true == 0) &
-            (predictions == 0)
-        )
+# ============================================================
+# MODEL EVALUATION
+# ============================================================
 
-        positive_count = np.sum(
-            y_true == 1
-        )
+def evaluate_predictions(true_labels, predictions, anomaly_scores):
 
-        negative_count = np.sum(
-            y_true == 0
-        )
+    print("\n========== VISION MODEL ==========")
 
-        true_positive_rate = (
-            true_positive / positive_count
-            if positive_count > 0
-            else 0
-        )
-
-        true_negative_rate = (
-            true_negative / negative_count
-            if negative_count > 0
-            else 0
-        )
-
-        balanced_accuracy = (
-            true_positive_rate
-            + true_negative_rate
-        ) / 2
-
-        results.append({
-            "threshold": threshold,
-            "precision": precision,
-            "recall": recall,
-            "f1_score": f1,
-            "balanced_accuracy": balanced_accuracy
-        })
-
-    results_df = pd.DataFrame(
-        results
-    )
-
-    best_row = results_df.loc[
-        results_df[
-            "balanced_accuracy"
-        ].idxmax()
-    ]
-
-    output_directory = (
-        get_project_root()
-        / "outputs"
-        / "reports"
-        / "vision"
-    )
-
-    output_directory.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    output_file = (
-        output_directory
-        / "vision_threshold_analysis.csv"
-    )
-
-    results_df.to_csv(
-        output_file,
-        index=False
-    )
-
+    print("\nAverage anomaly scores:")
     print(
-        "\n========== THRESHOLD ANALYSIS =========="
+        "Good images:",
+        round(float(np.mean(anomaly_scores[true_labels == 0])), 6)
     )
-
     print(
-        results_df.sort_values(
-            "balanced_accuracy",
-            ascending=False
-        ).head(10).to_string(
-            index=False
-        )
+        "Defective images:",
+        round(float(np.mean(anomaly_scores[true_labels == 1])), 6)
     )
 
-    print(
-        "\nBest threshold:"
-    )
-
-    print(
-        f"{best_row['threshold']:.6f}"
-    )
-
-    print(
-        f"Precision: "
-        f"{best_row['precision']:.4f}"
-    )
-
-    print(
-        f"Recall: "
-        f"{best_row['recall']:.4f}"
-    )
-
-    print(
-        f"F1 Score: "
-        f"{best_row['f1_score']:.4f}"
-    )
-
-    print(
-        f"Balanced Accuracy: "
-        f"{best_row['balanced_accuracy']:.4f}"
-    )
-
-    print(
-        f"\nThreshold report saved to:\n"
-        f"{output_file}"
-    )
-
-    return float(
-        best_row["threshold"]
-    )
-
-def evaluate_predictions(
-    y_true,
-    predictions,
-    scores
-):
-    """Evaluate vision anomaly detection."""
-
-    print(
-        "\n========== VISION MODEL =========="
-    )
-
-    print(
-        "\nClassification Report:"
-    )
+    print("\nClassification Report:")
 
     print(
         classification_report(
-            y_true,
+            true_labels,
             predictions,
-            target_names=[
-                "Good",
-                "Defective",
-            ],
+            labels=[0, 1],
+            target_names=["Good", "Defective"],
             zero_division=0,
         )
     )
 
     matrix = confusion_matrix(
-        y_true,
-        predictions
+        true_labels,
+        predictions,
+        labels=[0, 1],
     )
 
-    print(
-        "\nConfusion Matrix:"
-    )
-
+    print("Confusion Matrix:")
     print(matrix)
 
-    auc_score = roc_auc_score(
-        y_true,
-        scores
+    if len(np.unique(true_labels)) == 2:
+
+        auc = roc_auc_score(
+            true_labels,
+            anomaly_scores,
+        )
+
+        print(f"\nROC-AUC: {auc:.4f}")
+
+    else:
+        auc = None
+        print("\nROC-AUC unavailable: only one class found.")
+
+    print(
+        "Balanced Accuracy:",
+        round(
+            balanced_accuracy_score(
+                true_labels,
+                predictions,
+            ),
+            4,
+        ),
     )
 
     print(
-        f"\nROC-AUC: {auc_score:.4f}"
+        "Precision:",
+        round(
+            precision_score(
+                true_labels,
+                predictions,
+                zero_division=0,
+            ),
+            4,
+        ),
     )
 
-    return auc_score
+    print(
+        "Recall:",
+        round(
+            recall_score(
+                true_labels,
+                predictions,
+                zero_division=0,
+            ),
+            4,
+        ),
+    )
+
+    print(
+        "F1 Score:",
+        round(
+            f1_score(
+                true_labels,
+                predictions,
+                zero_division=0,
+            ),
+            4,
+        ),
+    )
+
+    return auc, matrix
 
 
-def save_results(
+# ============================================================
+# SAVE PREDICTION REPORT
+# ============================================================
+
+def save_prediction_report(
     image_paths,
     categories,
-    actual_labels,
+    true_labels,
     predictions,
-    scores
+    anomaly_scores,
 ):
-    """Save image-level prediction results."""
 
-    output_directory = (
-        get_project_root()
-        / "outputs"
-        / "reports"
-        / "vision"
-    )
-
-    output_directory.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    results = pd.DataFrame({
-        "image": [
-            path.name
-            for path in image_paths
-        ],
+    report = pd.DataFrame({
+        "image": [path.name for path in image_paths],
         "category": categories,
-        "actual_label": actual_labels,
-        "predicted_label": predictions,
-        "anomaly_score": scores,
+        "actual_label": [
+            "Defective" if label == 1 else "Good"
+            for label in true_labels
+        ],
+        "predicted_label": [
+            "Defective" if prediction == 1 else "Good"
+            for prediction in predictions
+        ],
+        "anomaly_score": anomaly_scores,
     })
 
-    output_file = (
-        output_directory
-        / "vision_predictions.csv"
+    output_path = REPORT_DIR / "vision_predictions.csv"
+
+    report.to_csv(output_path, index=False)
+
+    print(f"\nPrediction report saved: {output_path}")
+
+    return report
+
+
+# ============================================================
+# SAVE CATEGORY PERFORMANCE
+# ============================================================
+
+def save_category_performance(report):
+
+    results = []
+
+    for category in sorted(report["category"].unique()):
+
+        category_data = report[
+            report["category"] == category
+        ]
+
+        correct = (
+            category_data["actual_label"]
+            == category_data["predicted_label"]
+        ).sum()
+
+        total = len(category_data)
+
+        results.append({
+            "category": category,
+            "total_images": total,
+            "correctly_classified": int(correct),
+            "incorrectly_classified": int(total - correct),
+            "detection_rate": float(correct / total),
+            "average_anomaly_score": float(
+                category_data["anomaly_score"].mean()
+            ),
+            "minimum_anomaly_score": float(
+                category_data["anomaly_score"].min()
+            ),
+            "maximum_anomaly_score": float(
+                category_data["anomaly_score"].max()
+            ),
+        })
+
+    result_df = pd.DataFrame(results)
+
+    output_path = REPORT_DIR / "defect_performance.csv"
+
+    result_df.to_csv(output_path, index=False)
+
+    print(f"\nCategory report saved: {output_path}")
+    print("\nCategory Performance:")
+    print(result_df.to_string(index=False))
+
+    return result_df
+
+
+# ============================================================
+# SAVE DEFECT TYPE SUMMARY
+# ============================================================
+
+def save_defect_type_summary(categories):
+
+    summary = (
+        pd.Series(categories)
+        .value_counts()
+        .rename_axis("defect_type")
+        .reset_index(name="image_count")
     )
 
-    results.to_csv(
-        output_file,
-        index=False
-    )
+    summary["folder"] = summary["defect_type"]
 
-    print(
-        f"\nPredictions saved to:\n"
-        f"{output_file}"
-    )
+    summary = summary[
+        ["defect_type", "folder", "image_count"]
+    ]
 
+    output_path = REPORT_DIR / "defect_type_summary.csv"
+
+    summary.to_csv(output_path, index=False)
+
+    print(f"\nDefect type summary saved: {output_path}")
+
+
+# ============================================================
+# MAIN PIPELINE
+# ============================================================
 
 def main():
-    """Run the complete vision pipeline."""
 
-    print(
-        "========== VISION ANOMALY DETECTION =========="
+    print("\n========== VISION ANOMALY DETECTION ==========")
+
+    print(f"\nDataset location:\n{DATASET_DIR}")
+
+    create_directories()
+
+    # --------------------------------------------------------
+    # 1. Collect images
+    # --------------------------------------------------------
+
+    training_paths = collect_training_images()
+
+    testing_paths, test_labels, test_categories = (
+        collect_testing_images()
     )
 
-    project_root = (
-        get_project_root()
+    print(f"\nTraining images: {len(training_paths)}")
+    print(f"Testing images: {len(testing_paths)}")
+
+    # --------------------------------------------------------
+    # 2. Extract features
+    # --------------------------------------------------------
+
+    training_features = build_feature_matrix(
+        training_paths,
+        "training data",
     )
 
-    dataset_root = (
-        get_dataset_root()
+    testing_features = build_feature_matrix(
+        testing_paths,
+        "testing data",
     )
 
-    print(
-        f"\nDataset location:\n"
-        f"{dataset_root}"
+    print("\n========== FEATURE DATA ==========")
+
+    print("Training feature shape:", training_features.shape)
+    print("Testing feature shape:", testing_features.shape)
+
+    if training_features.shape[1] != 103:
+        raise ValueError("Training features must contain 103 columns.")
+
+    if testing_features.shape[1] != 103:
+        raise ValueError("Testing features must contain 103 columns.")
+
+    # --------------------------------------------------------
+    # 3. Split normal training data
+    # --------------------------------------------------------
+
+    fit_features, calibration_features = train_test_split(
+        training_features,
+        test_size=0.20,
+        random_state=RANDOM_STATE,
     )
 
-    (
-        train_images,
-        test_images,
-        test_labels,
-        test_categories,
-    ) = collect_dataset(
-        dataset_root
+    # --------------------------------------------------------
+    # 4. Train Isolation Forest
+    # --------------------------------------------------------
+
+    print("\nTraining Isolation Forest...")
+
+    model = train_anomaly_detector(fit_features)
+
+    # --------------------------------------------------------
+    # 5. Calibrate using held-out normal images
+    # --------------------------------------------------------
+
+    calibration_scores = calculate_scores(
+        model,
+        calibration_features,
     )
 
-    print(
-        f"\nTraining images: "
-        f"{len(train_images)}"
-    )
+    threshold = determine_threshold(calibration_scores)
 
-    print(
-        f"Testing images: "
-        f"{len(test_images)}"
-    )
+    print(f"\nCalibrated threshold: {threshold:.6f}")
 
-    # -----------------------------
-    # Feature extraction
-    # -----------------------------
+    # --------------------------------------------------------
+    # 6. Save trained model
+    # --------------------------------------------------------
 
-    training_features = (
-        build_feature_matrix(
-            train_images,
-            "training data"
-        )
-    )
+    save_model_artifacts(model, threshold)
 
-    test_features = (
-        build_feature_matrix(
-            test_images,
-            "testing data"
-        )
-    )
+    # --------------------------------------------------------
+    # 7. Evaluate on untouched test images
+    # --------------------------------------------------------
 
-    print(
-        "\n========== FEATURE DATA =========="
-    )
-
-    print(
-        f"Training feature shape: "
-        f"{training_features.shape}"
-    )
-
-    print(
-        f"Testing feature shape: "
-        f"{test_features.shape}"
-    )
-
-    # -----------------------------
-    # Train anomaly detector
-    # -----------------------------
-
-    print(
-        "\nTraining Isolation Forest..."
-    )
-
-    model = train_anomaly_detector(
-        training_features
-    )
-
-    # -----------------------------
-    # Training scores
-    # -----------------------------
-
-    training_scores = (
-        calculate_scores(
-            model,
-            training_features
-        )
-    )
-
-    threshold = (
-        determine_threshold(
-            training_scores
-        )
-    )
-
-    print(
-        f"\nAnomaly threshold: "
-        f"{threshold:.6f}"
-    )
-
-    # -----------------------------
-    # Test predictions
-    # -----------------------------
-
-    test_scores = (
-        calculate_scores(
-            model,
-            test_features
-        )
-    )
-
-    # -----------------------------
-    # Threshold optimization
-    # -----------------------------
-
-    optimized_threshold = (
-        analyze_thresholds(
-            test_labels,
-            test_scores
-        )
+    test_scores = calculate_scores(
+        model,
+        testing_features,
     )
 
     predictions = (
-    test_scores >= optimized_threshold
-).astype(int)
+        test_scores >= threshold
+    ).astype(int)
 
-    # -----------------------------
-    # Evaluation
-    # -----------------------------
+    # Diagnostic checks: confirm the score direction.
+    good_scores = test_scores[test_labels == 0]
+    defective_scores = test_scores[test_labels == 1]
+
+    print("\n========== SCORE DIRECTION CHECK ==========")
+
+    if len(good_scores):
+        print(
+            "Mean Good score:",
+            round(float(np.mean(good_scores)), 6),
+        )
+
+    if len(defective_scores):
+        print(
+            "Mean Defective score:",
+            round(float(np.mean(defective_scores)), 6),
+        )
+
+    # --------------------------------------------------------
+    # 8. Evaluate model
+    # --------------------------------------------------------
 
     evaluate_predictions(
         test_labels,
         predictions,
-        test_scores
+        test_scores,
     )
 
-    # -----------------------------
-    # Save results
-    # -----------------------------
+    # --------------------------------------------------------
+    # 9. Save reports
+    # --------------------------------------------------------
 
-    save_results(
-        test_images,
+    report = save_prediction_report(
+        testing_paths,
         test_categories,
         test_labels,
         predictions,
-        test_scores
+        test_scores,
     )
 
-    print(
-        "\n========== VISION PIPELINE COMPLETE =========="
-    )
+    save_category_performance(report)
+
+    save_defect_type_summary(test_categories)
+
+    print("\n========== VISION PIPELINE COMPLETE ==========")
+
+
+# ============================================================
+# ENTRY POINT
+# ============================================================
 
 if __name__ == "__main__":
     main()

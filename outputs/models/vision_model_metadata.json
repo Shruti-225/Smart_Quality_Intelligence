@@ -1,0 +1,13 @@
+{
+    "threshold": 0.06444988937469227,
+    "image_size": [
+        128,
+        128
+    ],
+    "random_state": 42,
+    "feature_count": 103,
+    "score_type": "negative_decision_function",
+    "prediction_rule": "anomaly_score >= threshold",
+    "calibration_percentile": 95,
+    "dataset": "MVTec AD Screw"
+}

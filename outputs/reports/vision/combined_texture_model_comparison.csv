@@ -1,0 +1,6 @@
+feature_set,feature_count,features,threshold,roc_auc,precision,recall,f1_score,balanced_accuracy,TN,FP,FN,TP
+All 10 Features,10,"lbp_entropy, lbp_uniformity, gradient_mean, gradient_std, gradient_p90, local_contrast_mean, local_contrast_std, local_contrast_p90, edge_density, edge_count",0.02607365833959661,0.5064562410329986,0.9166666666666666,0.09243697478991597,0.16793893129770993,0.5340233654437385,40,1,108,11
+Selected 6 Features,6,"local_contrast_std, gradient_p90, lbp_uniformity, edge_density, local_contrast_p90, gradient_mean",0.03380564064704406,0.5099405615904898,0.8571428571428571,0.10084033613445378,0.18045112781954886,0.5260299241647879,39,2,107,12
+Local Contrast Only,3,"local_contrast_mean, local_contrast_std, local_contrast_p90",0.060164744910154125,0.5861856937897111,0.8823529411764706,0.12605042016806722,0.22058823529411764,0.5386349661815946,39,2,104,15
+Gradient Only,3,"gradient_mean, gradient_std, gradient_p90",0.01597522898128644,0.4884197581471613,0.8571428571428571,0.10084033613445378,0.18045112781954886,0.5260299241647879,39,2,107,12
+LBP and Edge Only,3,"lbp_entropy, lbp_uniformity, edge_density",0.07282506760705948,0.4353351096536175,0.5,0.025210084033613446,0.048,0.4760196761631482,38,3,116,3

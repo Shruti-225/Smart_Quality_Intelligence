@@ -1,0 +1,6 @@
+Category,Images,Flagged,Flag Rate (%),Mean Anomaly Fraction,Median Anomaly Fraction
+manipulated_front,24,3,12.5,0.07356770833333333,0.078125
+scratch_head,24,0,0.0,0.0703125,0.078125
+scratch_neck,25,0,0.0,0.0675,0.0625
+thread_side,23,0,0.0,0.07744565217391304,0.078125
+thread_top,23,3,13.043478260869565,0.07608695652173914,0.078125

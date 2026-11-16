@@ -1,0 +1,3 @@
+Method,Foreground_Percent,Defect_Inside_Percent,Defect_Outside_Percent,Foreground_Border_Percent,Largest_Component_Share_Percent,Connected_Component_Count,Bounding_Box_Fill_Percent,Foreground_Mean_Intensity,Outside_Mean_Intensity,Foreground_Intensity_Std
+otsu_baseline,13.8575,82.6634,17.3366,0.0328,99.9996,1.0084,37.7475,111.7969,198.649,27.2094
+otsu_no_opening,14.0986,87.3627,12.6373,0.0368,99.9976,1.0168,37.1796,112.209,198.8252,27.3394

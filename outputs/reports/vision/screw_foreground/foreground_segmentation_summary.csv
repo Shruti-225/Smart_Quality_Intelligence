@@ -1,0 +1,11 @@
+Category,Image,Foreground_Percent,Defect_Inside_Foreground_Percent,Defect_Outside_Foreground_Percent
+manipulated_front,000.png,13.311767578125,27.419354838709676,72.58064516129032
+manipulated_front,001.png,13.63525390625,42.22222222222222,57.77777777777778
+scratch_head,000.png,13.4033203125,100.0,0.0
+scratch_head,001.png,13.665771484375,100.0,0.0
+scratch_neck,000.png,12.73193359375,100.0,0.0
+scratch_neck,001.png,13.02490234375,100.0,0.0
+thread_side,000.png,15.78369140625,100.0,0.0
+thread_side,001.png,13.385009765625,100.0,0.0
+thread_top,000.png,15.631103515625,100.0,0.0
+thread_top,001.png,14.520263671875,100.0,0.0

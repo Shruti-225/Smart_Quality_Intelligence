@@ -1,0 +1,6 @@
+Category,Images,Mean_Foreground_Percent,Mean_Defect_Pixel_Percent,Mean_Defect_Inside_Percent,Mean_Defect_Outside_Percent,Mean_Overlap_IoU
+manipulated_front,24,13.7121,0.3133,49.5801,50.4199,0.0135
+scratch_head,24,13.9267,0.2457,98.0952,1.9048,0.0175
+scratch_neck,25,13.6892,0.3301,81.1594,18.8406,0.0201
+thread_side,23,13.7403,0.2818,93.2722,6.7278,0.0191
+thread_top,23,14.2371,0.5132,92.1082,7.8918,0.0326
