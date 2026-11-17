@@ -5,6 +5,7 @@ import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
+import auth
 
 
 # ---------- CONFIGURATION ----------
@@ -22,6 +23,178 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+
+
+# ---------- AUTHENTICATION ----------
+
+auth.init_db()
+
+if "logged_in_user" not in st.session_state:
+    st.session_state.logged_in_user = None
+
+if st.session_state.logged_in_user is None:
+
+    st.markdown("""
+    <style>
+    .stApp {
+        background: linear-gradient(135deg, #0b1220 0%, #17243a 100%);
+    }
+
+    .block-container {
+        padding-top: 3rem;
+        max-width: 950px;
+    }
+
+    .auth-brand {
+        text-align: center;
+        padding: 25px 10px 15px;
+    }
+
+    .auth-brand h1 {
+        color: #e7bd68;
+        font-size: 38px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .auth-brand p {
+        color: #c5cedb;
+        font-size: 15px;
+    }
+
+    .auth-tagline {
+        color: #e7bd68;
+        text-align: center;
+        font-size: 13px;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+    }
+
+    div[data-testid="stForm"] {
+        background: #17243a;
+        border: 1px solid #46536a;
+        border-radius: 15px;
+        padding: 25px;
+    }
+
+    div.stButton > button,
+    div[data-testid="stFormSubmitButton"] > button {
+        background: #d5a94f;
+        color: #101827;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        min-height: 43px;
+    }
+
+    div.stButton > button:hover,
+    div[data-testid="stFormSubmitButton"] > button:hover {
+        background: #edc875;
+        color: #101827;
+        border: none;
+    }
+
+    .auth-footer {
+        text-align: center;
+        color: #aab5c5;
+        font-size: 12px;
+        margin-top: 30px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="auth-brand">
+        <h1>🏭 SMART QUALITY</h1>
+        <p>AI-Powered Quality Intelligence Platform</p>
+    </div>
+    <div class="auth-tagline">
+        INTELLIGENCE • INSPECTION • PREDICTION
+    </div>
+    """, unsafe_allow_html=True)
+
+    left, center, right = st.columns([1, 2, 1])
+
+    with center:
+        login_tab, register_tab = st.tabs(
+            ["🔐 Login", "✨ Create Account"]
+        )
+
+        with login_tab:
+            st.subheader("Welcome Back")
+            st.caption("Sign in to access your quality intelligence dashboard.")
+
+            with st.form("login_form"):
+                identifier = st.text_input("Email or Username")
+                password = st.text_input(
+                    "Password",
+                    type="password"
+                )
+
+                login_button = st.form_submit_button(
+                    "Login to Dashboard",
+                    use_container_width=True
+                )
+
+                if login_button:
+                    user = auth.authenticate_user(
+                        identifier,
+                        password
+                    )
+
+                    if user:
+                        st.session_state.logged_in_user = user
+                        st.rerun()
+                    else:
+                        st.error("Invalid username/email or password.")
+
+        with register_tab:
+            st.subheader("Create Your Account")
+            st.caption("Register to get access to Smart Quality Intelligence.")
+
+            with st.form("register_form"):
+                full_name = st.text_input("Full Name")
+                email = st.text_input("Email Address")
+                username = st.text_input("Username")
+                new_password = st.text_input(
+                    "Password (minimum 8 characters)",
+                    type="password"
+                )
+                confirm_password = st.text_input(
+                    "Confirm Password",
+                    type="password"
+                )
+
+                register_button = st.form_submit_button(
+                    "Create Account",
+                    use_container_width=True
+                )
+
+                if register_button:
+                    if new_password != confirm_password:
+                        st.error("Passwords do not match.")
+                    else:
+                        success, message = auth.register_user(
+                            full_name,
+                            email,
+                            username,
+                            new_password
+                        )
+
+                        if success:
+                            st.success(message)
+                        else:
+                            st.error(message)
+
+    st.markdown("""
+    <div class="auth-footer">
+        SMART QUALITY INTELLIGENCE | AI-POWERED QUALITY CONTROL
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.stop()
+
 
 
 # ---------- DATA HELPERS ----------
@@ -73,6 +246,16 @@ features = load_features()
 # ---------- SIDEBAR ----------
 st.sidebar.title("🏭 Smart Quality")
 st.sidebar.caption("AI-Powered Quality Intelligence")
+
+current_user = st.session_state.logged_in_user
+
+st.sidebar.success(
+    f"Logged in as {current_user['full_name']}"
+)
+
+if st.sidebar.button("Logout", use_container_width=True):
+    st.session_state.logged_in_user = None
+    st.rerun()
 
 page = st.sidebar.radio(
     "Navigation",
@@ -185,7 +368,7 @@ elif page == "Production Analytics":
         )
 
         show_chart("quality_distribution.png", "Saved quality distribution")
-        show_chart("dashboard.png", "Saved project dashboard")
+        
 
 
 

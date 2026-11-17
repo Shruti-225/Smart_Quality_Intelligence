@@ -7,3 +7,13 @@ __pycache__/
 data/raw/
 data/processed/
 streamlit_dashboard_backup.py
+
+# Authentication database
+outputs/auth/
+
+# Local backups
+streamlit_dashboard_before_auth.py
+streamlit_dashboard_before_login_design.py
+
+# Authentication database
+outputs/auth/
